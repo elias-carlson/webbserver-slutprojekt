@@ -1,0 +1,17 @@
+body {
+    background-color: blue;
+    margin: 0;
+    padding: 0;
+}
+
+header {
+    height: 100px;
+    width: 100%;
+}
+
+.logo {
+    height: 100%;
+    width: 10%;
+    background: url("/img/logo.png") center no-repeat;
+    background-size: 70%;
+}
