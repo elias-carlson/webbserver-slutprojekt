@@ -11,18 +11,29 @@ html lang="en"
     body
 
     header
-        .logo
+        a.logo href="/"
+
+        .error
+            - if error
+                = error
 
         .login
-            h3
-                <a href="/login"> Login </a>
-
+            - if user
+                p Welcome, #{user["username"]}!
+            - else
+                    form action="/login" method="GET"
+                        input#submitbtn type="submit" value="Login"
         .register
-            h3
-                <a href="/register"> Register </a>
+            - if user
+                    form action="/logout" method="POST"
+                        input#submitbtn type="submit" value="Logout"
+            - else
+                    form action="/register" method="GET"
+                        input#submitbtn type="submit" value="Register"
             
         .cart
             i class="material-icons" shopping_cart
 
 
-    ==yield
+    main
+        ==yield

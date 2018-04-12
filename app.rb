@@ -7,15 +7,15 @@ class App < Sinatra::Base
 	enable :sessions
 
 	get '/' do
-		slim :index		
+		slim :shop, locals:{error: flash[:error], user: session[:user]}
 	end
 
 	get '/login' do
-		slim :login
+		slim :login, locals:{error: flash[:error], user: session[:user]}
 	end
 
 	get '/register' do
-		slim :register
+		slim :register, locals:{error: flash[:error], user: session[:user]}
 	end
 
 	post '/register' do
@@ -23,11 +23,19 @@ class App < Sinatra::Base
 		password = params["password"]
 		confirm_password = params["confirm_password"]
 
+		user = get_user(username)
+
 		if password == confirm_password
-			create_user(username, password)
-			redirect('/login')
+			if user == nil
+				create_user(username, password)
+				redirect('/login')
+			else
+				flash[:error] = "A user with this username already exists, please try again."
+				redirect('/register')
+			end
 		else
-			flash[:error] = "Passwords don't match."
+			flash[:error] = "Passwords don't match. "
+			redirect('/register')			
 		end
 	end
 
@@ -38,17 +46,23 @@ class App < Sinatra::Base
 		user = get_user(username)
 
 		if user == nil
-			flash[:error] = "No user found with that username."
-		end
-
-		password_digest = user["password"]
-
-		if password_digest == password
-			session[:user] = true
-			redirect('/')
+			flash[:error] = "Incorrect username or password"
+			redirect('/login')			
 		else
-			flash[:error] = "Incorrect username or password."
-			redirect('/login')
+			password_digest = user["password"]
+
+			if BCrypt::Password.new(password_digest) == password
+				session[:user] = user
+				redirect('/')
+			else
+				flash[:error] = "Incorrect username or password."
+				redirect('/login')
+			end
 		end
+	end
+
+	post '/logout' do
+		session[:user] = nil
+		redirect back
 	end
 end

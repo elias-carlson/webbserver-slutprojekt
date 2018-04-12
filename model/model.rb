@@ -16,6 +16,6 @@ module WEBBSERVER_SLUTPROJEKT
     def create_user username, password
         db = db_connect()
         password_digest = BCrypt::Password.create(password)
-        db.execute("INSERT INTO users(username, password_digest, email) VALUES (?,?,?)", [username, password_digest, email])
+        db.execute("INSERT INTO users(username, password) VALUES (?,?)", [username, password_digest])
     end
 end
