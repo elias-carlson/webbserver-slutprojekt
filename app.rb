@@ -7,15 +7,21 @@ class App < Sinatra::Base
 	enable :sessions
 
 	get '/' do
-		slim :shop, locals:{error: flash[:error], user: session[:user]}
+		result = get_articles()
+		if session[:user]
+			cart = get_cart(session[:user]["id"])
+		end
+		slim :shop, locals:{error: flash[:error], user: session[:user], articles: result, cart: cart}
 	end
 
 	get '/login' do
-		slim :login, locals:{error: flash[:error], user: session[:user]}
+		cart = nil
+		slim :login, locals:{error: flash[:error], user: session[:user], cart: cart}
 	end
 
 	get '/register' do
-		slim :register, locals:{error: flash[:error], user: session[:user]}
+		cart = nil
+		slim :register, locals:{error: flash[:error], user: session[:user], cart: cart}
 	end
 
 	post '/register' do
@@ -64,5 +70,19 @@ class App < Sinatra::Base
 	post '/logout' do
 		session[:user] = nil
 		redirect back
+	end
+
+	post '/add_to_cart' do
+		article_id = params["article_id"]
+
+		if session[:user] == nil
+			flash[:error] = "You must log in to use a cart"
+			redirect '/'
+		else
+			add_to_cart(article_id, session[:user]["id"])
+			redirect '/'
+		end
+
+
 	end
 end

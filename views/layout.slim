@@ -21,18 +21,32 @@ html lang="en"
             - if user
                 p Welcome, #{user["username"]}!
             - else
-                    form action="/login" method="GET"
-                        input#submitbtn type="submit" value="Login"
+                form action="/login" method="GET"
+                    input type="submit" value="Login"
         .register
             - if user
-                    form action="/logout" method="POST"
-                        input#submitbtn type="submit" value="Logout"
+                form action="/logout" method="POST"
+                    input type="submit" value="Logout"
             - else
-                    form action="/register" method="GET"
-                        input#submitbtn type="submit" value="Register"
+                form action="/register" method="GET"
+                    input type="submit" value="Register"
             
-        .cart
+        .cart_logo
             i class="material-icons" shopping_cart
+
+            .cart
+                - total_price = 0
+                - if cart
+                    - cart[1].each_with_index do |article, i|
+                        p Name: #{article["name"]}
+                        p Price: #{article["price"]}
+                        p Amount: #{cart[0][i]["amount"]}
+                        form action="/remove_from_cart" method="POST"
+                            input type="hidden" value="#{article["id"]}" name="article_id"
+                            input type="submit" value="Remove from cart" 
+                        - total_price += article["price"] * cart[0][i]["amount"]
+                    p Total price: #{total_price}
+
 
 
     main

@@ -54,17 +54,22 @@ header {
     grid-column: 5/6;
 }
 
-.cart {
+.cart_logo {
     grid-column: 6/7;
 }
 
-.cart .material-icons {
+.cart_logo .material-icons {
     font-size: 36px;
+}
+
+.cart {
+    display: flex;
+    flex-direction: column;
+    background-color: pink;
 }
 
 main {
     display: flex;
-
 }
 
 .form {
@@ -73,6 +78,7 @@ main {
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 100px);
+    width: 100%;
 }
 
 .form form {
@@ -104,7 +110,7 @@ main {
 
 .shopLeft .category {
     height: 50px;
-    border: 1px dotted black;
+    border-top: 1px solid black;
 }
 
 .shopRight {
@@ -116,14 +122,20 @@ main {
 .sortBar {
     height: 50px;
     width: 100%;
-    background-color: white;
     border: 1px solid black;
 }
 
 .articles {
     display: grid;
-    grid-auto-flow: row;
+    margin: 4vw 4vw 0 4vw;
+    grid-template-columns: repeat(4, calc(25% - 3vw));
+    grid-template-rows: repeat(3, 200px);
+    grid-gap: 4vw 4vw;
+    justify-items: center;
+    grid-auto-flow: row; 
 }
 
 .article {
+    width: 100%;
+    border: black solid 2px;
 }
