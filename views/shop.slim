@@ -1,23 +1,12 @@
-section.shopLeft
-    .category
-        h3 Monitors
-    .category
-        h3 Graphics cards
-    .category
-        h3 Computers
-
-section.shopRight
-    .sortBar
-
+section.shop
     .articles
         - i = 0
         - articles.each do |i|
-            .article
-                div 
-                    img src="#{i["image_url"]}" height="150px"
-                div 
-                    p #{i["name"]}
-                    p Price: #{i["price"]}
+            .article style="background-image: url(/img/#{i["image_url"]})"
+                div
+                    h3 #{i["name"]}
+                    p #{i["price"]} :-
+                    p #{i["description"]}
                     form action="/add_to_cart" method="POST"
                         input type="hidden" value="#{i["id"]}" name="article_id"
                         input type="submit" value="Add to cart" 

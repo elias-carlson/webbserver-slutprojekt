@@ -8,20 +8,31 @@ class App < Sinatra::Base
 
 	get '/' do
 		result = get_articles()
-		if session[:user]
-			cart = get_cart(session[:user]["id"])
-		end
-		slim :shop, locals:{error: flash[:error], user: session[:user], articles: result, cart: cart}
+		slim :shop, locals:{error: flash[:error], user: session[:user], articles: result}
 	end
 
 	get '/login' do
 		cart = nil
-		slim :login, locals:{error: flash[:error], user: session[:user], cart: cart}
+		slim :login, locals:{error: flash[:error], user: session[:user]}
 	end
 
 	get '/register' do
 		cart = nil
-		slim :register, locals:{error: flash[:error], user: session[:user], cart: cart}
+		slim :register, locals:{error: flash[:error], user: session[:user]}
+	end
+
+	get '/cart' do
+		if session[:user]
+			cart = get_cart(session[:user]["id"])
+			if cart[0][0] == nil
+				flash[:error] = "No items in cart, add items and try again"
+				redirect '/'
+			end
+		else
+			flash[:error] = "Login to access your cart"
+			redirect '/'
+		end
+		slim :cart, locals:{error: flash[:error], user: session[:user], cart: cart}
 	end
 
 	post '/register' do
@@ -76,13 +87,18 @@ class App < Sinatra::Base
 		article_id = params["article_id"]
 
 		if session[:user] == nil
-			flash[:error] = "You must log in to use a cart"
+			flash[:error] = "Login to add items to your cart"
 			redirect '/'
 		else
 			add_to_cart(article_id, session[:user]["id"])
 			redirect '/'
 		end
+	end
 
+	post '/remove_from_cart' do
+		article_id = params["article_id"]
 
+		remove_from_cart(article_id, session[:user]["id"])
+		redirect '/'
 	end
 end

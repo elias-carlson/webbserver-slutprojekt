@@ -6,7 +6,7 @@ body {
 
 header {
     display: grid;
-    grid-template-columns: 10% auto repeat(4, 10%);
+    grid-template-columns: 10% auto  20% repeat(3, 10%);
     height: 100px;
     width: 100%;
     background-color: white;
@@ -20,13 +20,13 @@ header {
     grid-column: 1/2;
 }
 
-.login, .register, .cart, .error {
+.login, .register, .cart_logo, .error {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.login input[type="submit"], .register input[type="submit"] {
+header input[type="submit"] {
     background-color: black;
     color: white;
     cursor: pointer;
@@ -35,6 +35,7 @@ header {
     border: none;
     border-radius: 2px;
     text-decoration: none;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.75);        
 }
 
 .login p {
@@ -56,6 +57,9 @@ header {
 
 .cart_logo {
     grid-column: 6/7;
+    text-decoration: none;
+    color: black;
+    text-shadow: 2px 2px 2px rgba(0,0,0,0.75);
 }
 
 .cart_logo .material-icons {
@@ -65,7 +69,6 @@ header {
 .cart {
     display: flex;
     flex-direction: column;
-    background-color: pink;
 }
 
 main {
@@ -102,34 +105,16 @@ main {
     width: 50%;
 }
 
-.shopLeft {
-    width: 20%;
-    min-height: calc(100vh - 100px);
-    border: 2px solid black;
-}
-
-.shopLeft .category {
-    height: 50px;
-    border-top: 1px solid black;
-}
-
-.shopRight {
-    width: 80%;
-    min-height: calc(100vh - 100px);
-    border: 2px solid black;
-}
-
-.sortBar {
-    height: 50px;
+.shop {
     width: 100%;
-    border: 1px solid black;
+    min-height: calc(100vh - 100px);
 }
 
 .articles {
     display: grid;
     margin: 4vw 4vw 0 4vw;
     grid-template-columns: repeat(4, calc(25% - 3vw));
-    grid-template-rows: repeat(3, 200px);
+    grid-template-rows: repeat(3, 250px);
     grid-gap: 4vw 4vw;
     justify-items: center;
     grid-auto-flow: row; 
@@ -137,5 +122,36 @@ main {
 
 .article {
     width: 100%;
-    border: black solid 2px;
+    background-size: 70%;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 2px;
+    box-shadow: 2px 2px 10px rgba(0,0,0,0.75);
+}
+
+.article div {
+    background-color: rgba(255,255,255,0.5);
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.article div p, .article div h3 {
+    margin-left: 10px;
+}
+
+.article input[type="submit"] {
+    background-color: black;
+    border: none;
+    color: white;
+    font-family: 'Roboto', sans-serif;
+    margin: 0 0 10px 10px;
+    font-size: 1.05em;
+    padding: 5px;
+    border-radius: 2px;
+    box-shadow: 2px 2px 2px rgba(0,0,0,0.75);        
 }

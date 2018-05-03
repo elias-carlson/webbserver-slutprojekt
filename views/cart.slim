@@ -1,0 +1,15 @@
+.cart
+    - total_price = 0
+    - if cart
+        - cart[1].each_with_index do |article, i|
+            - if cart[0][i]
+                p Name: #{article["name"]}
+                p Price: #{article["price"]}
+                p Amount: #{cart[0][i]["amount"]}
+                - p cart[0][0]
+                form action="/remove_from_cart" method="POST"
+                    input type="hidden" value="#{cart[0][i]["article_id"]}" name="article_id"
+                    input type="submit" value="Remove from cart" 
+                - total_price += article["price"] * cart[0][i]["amount"]
+        - if total_price != 0
+            p Total price: #{total_price}

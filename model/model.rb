@@ -53,6 +53,17 @@ module WEBBSERVER_SLUTPROJEKT
         end
     end
 
+    def remove_from_cart(article_id, user_id)
+        db = db_connect()
+        
+        result = db.execute("SELECT amount FROM orders WHERE article_id = ? AND user_id = ?", [article_id, user_id]) 
+
+        if result[0]["amount"] != 0  
+            result[0]["amount"] -=1
+            db.execute("UPDATE orders SET amount=? WHERE user_id=? AND article_id=?", [result[0]["amount"], user_id, article_id])
+        end
+    end
+
     def get_cart(user_id)
         db = db_connect()
         articles = []
@@ -60,10 +71,15 @@ module WEBBSERVER_SLUTPROJEKT
         result = db.execute("SELECT * FROM orders WHERE user_id=?", [user_id])
 
         result.each do |i|
-            article_info = db.execute("SELECT name, price FROM articles WHERE id=?", [i["article_id"]])
+            if i["amount"] == 0
+                db.execute("DELETE FROM orders WHERE user_id=? AND article_id=?", [user_id, i["article_id"]])
+            end
+            article_info = db.execute("SELECT name, price, description FROM articles WHERE id=?", [i["article_id"]])
             article_info = article_info[0]
             articles << article_info
         end
+
+        result = db.execute("SELECT * FROM orders WHERE user_id=?", [user_id])
 
         return result, articles
     end
