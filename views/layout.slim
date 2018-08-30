@@ -32,7 +32,9 @@ html lang="en"
                     input type="submit" value="Register"
             
         a.cart_logo href="/cart"
-            i class="material-icons" shopping_cart
+            i class="material-icons" shopping_cart 
+            - if total_amount
+                span #{total_amount}
 
     main
         ==yield

@@ -5,8 +5,15 @@ section.shop
             .article style="background-image: url(/img/#{i["image_url"]})"
                 div
                     h3 #{i["name"]}
-                    p #{i["price"]} :-
-                    p #{i["description"]}
-                    form action="/add_to_cart" method="POST"
-                        input type="hidden" value="#{i["id"]}" name="article_id"
-                        input type="submit" value="Add to cart" 
+                    
+                    / p #{i["description"]}
+                    .buttons
+                        form action="/article_info" method="GET"
+                            input type="hidden" value="#{i["id"]}" name="article_id"
+                            input type="image" name="submit" src="img/info.svg"                                                
+
+                        p #{i["price"]} :-
+                        
+                        form action="/add_to_cart" method="POST"
+                            input type="hidden" value="#{i["id"]}" name="article_id"
+                            input type="image" name="submit" src="img/addToCart.svg"

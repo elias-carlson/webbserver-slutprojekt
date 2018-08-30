@@ -8,22 +8,36 @@ class App < Sinatra::Base
 
 	get '/' do
 		result = get_articles()
-		slim :shop, locals:{error: flash[:error], user: session[:user], articles: result}
+		if session[:user]
+			cart = get_cart(session[:user]["id"])
+			total_amount = cart[2]
+		end
+		slim :shop, locals:{error: flash[:error], user: session[:user], articles: result, total_amount: total_amount}
 	end
 
 	get '/login' do
+		if session[:user]
+			cart = get_cart(session[:user]["id"])
+			total_amount = cart[2]
+			p total_amount
+		end
 		cart = nil
-		slim :login, locals:{error: flash[:error], user: session[:user]}
+		slim :login, locals:{error: flash[:error], user: session[:user], total_amount: total_amount}
 	end
 
 	get '/register' do
+		if session[:user]
+			cart = get_cart(session[:user]["id"])
+			total_amount = cart[2]
+			p total_amount
+		end
 		cart = nil
-		slim :register, locals:{error: flash[:error], user: session[:user]}
+		slim :register, locals:{error: flash[:error], user: session[:user], total_amount: total_amount}
 	end
 
 	get '/cart' do
 		if session[:user]
-			cart = get_cart(session[:user]["id"])
+			cart = get_cart(session[:user]["id"])			
 			if cart[0][0] == nil
 				flash[:error] = "No items in cart, add items and try again"
 				redirect '/'
@@ -32,7 +46,8 @@ class App < Sinatra::Base
 			flash[:error] = "Login to access your cart"
 			redirect '/'
 		end
-		slim :cart, locals:{error: flash[:error], user: session[:user], cart: cart}
+		total_amount = cart[2]
+		slim :cart, locals:{error: flash[:error], user: session[:user], cart: cart, total_amount: total_amount}
 	end
 
 	post '/register' do
@@ -99,6 +114,6 @@ class App < Sinatra::Base
 		article_id = params["article_id"]
 
 		remove_from_cart(article_id, session[:user]["id"])
-		redirect '/'
+		redirect '/cart'
 	end
 end

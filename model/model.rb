@@ -67,6 +67,7 @@ module WEBBSERVER_SLUTPROJEKT
     def get_cart(user_id)
         db = db_connect()
         articles = []
+        total_amount = 0
 
         result = db.execute("SELECT * FROM orders WHERE user_id=?", [user_id])
 
@@ -74,6 +75,7 @@ module WEBBSERVER_SLUTPROJEKT
             if i["amount"] == 0
                 db.execute("DELETE FROM orders WHERE user_id=? AND article_id=?", [user_id, i["article_id"]])
             end
+            total_amount += i["amount"]
             article_info = db.execute("SELECT name, price, description FROM articles WHERE id=?", [i["article_id"]])
             article_info = article_info[0]
             articles << article_info
@@ -81,6 +83,6 @@ module WEBBSERVER_SLUTPROJEKT
 
         result = db.execute("SELECT * FROM orders WHERE user_id=?", [user_id])
 
-        return result, articles
+        return result, articles, total_amount
     end
 end
